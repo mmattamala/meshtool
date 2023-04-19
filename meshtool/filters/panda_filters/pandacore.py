@@ -28,8 +28,8 @@ from panda3d.core import loadPrcFileData
 
 # after numpy 1.3, unique1d was renamed to unique
 args, varargs, keywords, defaults = inspect.getargspec(numpy.unique)
-if "return_inverse" not in args:
-    numpy.unique = numpy.unique1d
+# if "return_inverse" not in args:
+#     numpy.unique = numpy.unique1d
 
 
 def getNodeFromController(controller, controlled_prim):

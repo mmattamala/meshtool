@@ -1,7 +1,7 @@
 from heapq import heappush, heappop
 from networkx import NetworkXError
 import networkx as nx
-import __builtin__
+# import __builtin__
 
 
 def astar_path(G, source, target, heuristic=None, weight="weight", exclude=None, subset=None):

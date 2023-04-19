@@ -1,6 +1,6 @@
 from meshtool.filters.base_filters import VisualizationFilter
 
-from pandacore import getSceneMembers
+from .pandacore import getSceneMembers
 import numpy
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import GeomNode, TransparencyAttrib, OrthographicLens
@@ -9,7 +9,7 @@ from panda3d.core import Vec4, Vec3, Point3, Mat4
 from panda3d.core import loadPrcFileData
 import collada
 import math
-from pandacontrols import KeyboardMovement, MouseDrag, MouseScaleZoom
+from .pandacontrols import KeyboardMovement, MouseDrag, MouseScaleZoom
 
 
 def runViewer(mesh):

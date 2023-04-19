@@ -3,13 +3,13 @@ from meshtool.filters.base_filters import SimplifyFilter
 import inspect
 import numpy
 import networkx as nx
-from itertools import chain, zip, combinations
+from itertools import chain, combinations
 import datetime
 import math
-import __builtin__
+# import __builtin__
 import heapq
-from render_utils import renderVerts, renderCharts
-from graph_utils import astar_path, dfs_interior_nodes, super_cycle
+from .render_utils import renderVerts, renderCharts
+from .graph_utils import astar_path, dfs_interior_nodes, super_cycle
 import gc
 import sys
 import random
@@ -30,8 +30,8 @@ import bisect
 
 # after numpy 1.3, unique1d was renamed to unique
 args, varargs, keywords, defaults = inspect.getargspec(numpy.unique)
-if "return_inverse" not in args:
-    numpy.unique = numpy.unique1d
+# if "return_inverse" not in args:
+#     numpy.unique = numpy.unique1d
 
 # Import both cv (opencv's official python bindings)
 # and pyopencv, a python binding to cv that makes it

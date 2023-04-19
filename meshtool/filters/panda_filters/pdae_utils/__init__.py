@@ -1,16 +1,13 @@
 try:
-    from pdae_cython import *
+    from .pdae_cython import *
 except ImportError:
-    from pdae_python import *
+    from .pdae_python import *
 
 import unittest
 import time
 import os
 
-try:
-    import cStringIO as StringIO
-except ImportError:
-    import StringIO
+from io import StringIO
 CURDIR = os.path.abspath(os.path.dirname(__file__))
 
 

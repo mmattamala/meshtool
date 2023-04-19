@@ -1,8 +1,8 @@
 from meshtool.args import FileArgument
 from meshtool.filters.base_filters import VisualizationFilter
 
-from pandacore import getSceneMembers, ensureCameraAt, attachLights
-from pandacontrols import KeyboardMovement, MouseDrag, MouseScaleZoom, MouseCamera, ButtonUtils
+from .pandacore import getSceneMembers, ensureCameraAt, attachLights
+from .pandacontrols import KeyboardMovement, MouseDrag, MouseScaleZoom, MouseCamera, ButtonUtils
 from direct.gui.DirectGui import DirectSlider, OnscreenText
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import GeomNode, TransparencyAttrib, GeomVertexWriter
@@ -11,7 +11,7 @@ from panda3d.core import Mat4
 import sys
 import numpy
 import collada
-from pdae_utils import PM_OP, readPDAE
+from meshtool.filters.panda_filters.pdae_utils import PM_OP, readPDAE
 
 uiArgs = {"rolloverSound": None, "clickSound": None}
 

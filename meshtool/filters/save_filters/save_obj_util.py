@@ -1,6 +1,6 @@
 import collada
 import os.path
-from itertools import zip, chain
+from itertools import chain
 from meshtool.filters.base_filters import FilterException
 
 

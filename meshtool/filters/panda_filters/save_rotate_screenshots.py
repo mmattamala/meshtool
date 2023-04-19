@@ -4,7 +4,7 @@ import os.path
 from math import pi
 from meshtool.util import Image
 
-from meshtool.filters.panda_filters.pandacore import setupPandaApp, getScreenshot, setCameraAngle
+from .pandacore import setupPandaApp, getScreenshot, setCameraAngle
 
 
 def saveRotateScreenshots(p3dapp, basename, N, W, H):
