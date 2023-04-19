@@ -4,7 +4,7 @@ from libc.stdio cimport fgets
 try:
     from cStringIO import StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 
 cdef enum PM_OP:
     INDEX_UPDATE = 1

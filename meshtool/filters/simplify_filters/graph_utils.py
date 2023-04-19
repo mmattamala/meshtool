@@ -3,12 +3,13 @@ from networkx import NetworkXError
 import networkx as nx
 import __builtin__
 
-def astar_path(G, source, target, heuristic=None, weight='weight', exclude=None, subset=None):
-    """Return a list of nodes in a shortest path between source and target 
+
+def astar_path(G, source, target, heuristic=None, weight="weight", exclude=None, subset=None):
+    """Return a list of nodes in a shortest path between source and target
     using the A* ("A-star") algorithm.
 
     There may be more than one shortest path.  This returns only one.
-    
+
     Parameters
     ----------
     G : NetworkX graph
@@ -17,7 +18,7 @@ def astar_path(G, source, target, heuristic=None, weight='weight', exclude=None,
        Starting node for path
 
     target : node
-       Ending node for path 
+       Ending node for path
 
     heuristic : function
        A function to evaluate the estimate of the distance
@@ -30,7 +31,7 @@ def astar_path(G, source, target, heuristic=None, weight='weight', exclude=None,
     exclude: set, optional
        An optional set of nodes that will be excluded from
        the traversal
-       
+
     subset: set, optional
        An optional set of nodes that the path has to be in
 
@@ -60,11 +61,12 @@ def astar_path(G, source, target, heuristic=None, weight='weight', exclude=None,
     """
     if G.is_multigraph():
         raise NetworkXError("astar_path() not implemented for Multi(Di)Graphs")
-    
+
     if heuristic is None:
         # The default heuristic is h=0 - same as Dijkstra's algorithm
-        def heuristic(u,v):
+        def heuristic(u, v):
             return 0
+
     # The queue stores priority, node, cost to reach, and parent.
     # Uses Python heapq to keep in priority order.
     # Add each node's hash to the queue to prevent the underlying heap from
@@ -78,7 +80,7 @@ def astar_path(G, source, target, heuristic=None, weight='weight', exclude=None,
     enqueued = {}
     # Maps explored nodes to parent closest to the source.
     explored = {}
-    
+
     while queue:
         # Pop the smallest item from queue.
         _, __, curnode, dist, parent = heappop(queue)
@@ -98,11 +100,13 @@ def astar_path(G, source, target, heuristic=None, weight='weight', exclude=None,
         explored[curnode] = parent
 
         for neighbor, w in G[curnode].items():
-            if neighbor in explored or \
-                    (exclude and neighbor != target and neighbor in exclude) or \
-                    (subset and neighbor not in subset):
+            if (
+                neighbor in explored
+                or (exclude and neighbor != target and neighbor in exclude)
+                or (subset and neighbor not in subset)
+            ):
                 continue
-            ncost = dist + w.get(weight,1)
+            ncost = dist + w.get(weight, 1)
             if neighbor in enqueued:
                 qcost, h = enqueued[neighbor]
                 # if qcost < ncost, a longer path to neighbor remains
@@ -114,32 +118,31 @@ def astar_path(G, source, target, heuristic=None, weight='weight', exclude=None,
             else:
                 h = heuristic(neighbor, target)
             enqueued[neighbor] = ncost, h
-            heappush(queue, (ncost + h, hash(neighbor), neighbor, 
-                             ncost, curnode))
+            heappush(queue, (ncost + h, hash(neighbor), neighbor, ncost, curnode))
 
-    raise nx.exception.NetworkXError("Node %s not reachable from %s"%(source,target))
+    raise nx.exception.NetworkXError("Node %s not reachable from %s" % (source, target))
 
 
 def dfs_interior_nodes(G, starting, boundary, subset):
     """Produce nodes on the interior of a boundary of nodes
-    
+
     Parameters
     ----------
     G : NetworkX graph
 
     starting : set
        Starting nodes to find interior nodes from
-       
+
     boundary : set
        Boundary of nodes not to go outside of
-       
+
     subset : set
        List of nodes to consider. Any nodes not in this set
        will not be traversed.
-    
+
     """
-    nodes=list(starting)
-    visited=set()
+    nodes = list(starting)
+    visited = set()
     for start in nodes:
         if start in visited:
             continue
@@ -155,19 +158,20 @@ def dfs_interior_nodes(G, starting, boundary, subset):
                     stack.append(iter(G[child]))
             except StopIteration:
                 stack.pop()
-                
+
+
 def super_cycle(G):
     """Yields the nodes of the longest cycle available in G"""
-    
+
     cycles = nx.cycle_basis(G)
     if len(cycles) < 1:
         return
     cycle_sets = [set(c) for c in cycles]
     visited_cycles = set()
-    
+
     def visit_cycle(curcycle, startnode):
         thiscycle = cycles[curcycle]
-        reordered_cycle = thiscycle[thiscycle.index(startnode):] + thiscycle[:thiscycle.index(startnode)]
+        reordered_cycle = thiscycle[thiscycle.index(startnode) :] + thiscycle[: thiscycle.index(startnode)]
         visited_cycles.add(curcycle)
         for node in reordered_cycle:
             for i, othercycle in enumerate(cycle_sets):
@@ -175,5 +179,5 @@ def super_cycle(G):
                     for othernode in visit_cycle(i, node):
                         yield othernode
             yield node
-    
+
     return visit_cycle(0, cycles[0][0])
