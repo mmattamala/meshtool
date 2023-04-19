@@ -8,6 +8,7 @@ import time
 import os
 
 from io import StringIO
+
 CURDIR = os.path.abspath(os.path.dirname(__file__))
 
 
