@@ -4,7 +4,7 @@ import posixpath
 import struct
 from math import pi, sin, cos
 from meshtool.util import Image, ImageOps
-from io import StringIO
+from io import StringIO, BytesIO
 import inspect
 import math
 
@@ -304,14 +304,15 @@ def pilFromData(image_data):
     try:
         im = Image.open(StringIO(image_data))
         im.load()
-    except IOError:
+    except Exception:  # IOError:
         # PIL couldn't open, so try to read with panda3d which supports DDS:
         im = None
         tex = textureFromData(image_data)
         if tex is not None:
             outdata = tex.getRamImageAs("RGB").getData()
             try:
-                im = Image.fromstring("RGB", (tex.getXSize(), tex.getYSize()), outdata)
+                # im = Image.fromstring("RGB", (tex.getXSize(), tex.getYSize()), outdata)
+                im = Image.frombytes("RGB", (tex.getXSize(), tex.getYSize()), outdata)
                 im.load()
             except IOError:
                 # Any problem with panda3d might generate an invalid image buffer, so don't convert this
@@ -365,7 +366,8 @@ def getTexture(color=None, alpha=None, texture_cache=None, diffuseinit=None):
                 im = im.convert("RGBA")
             else:
                 im = im.convert("RGB")
-            newbuf = StringIO()
+            # newbuf = StringIO()
+            newbuf = BytesIO()
             im.save(newbuf, "PNG")
             image_data = newbuf.getvalue()
         else:
@@ -511,10 +513,13 @@ def getStateFromMaterial(prim_material, texture_cache, col_inst=None):
 
         shininess = getattr(prim_material.effect, "shininess", None)
         # this sets a sane value for blinn shading
-        if shininess <= 1.0:
-            if shininess < 0.01:
-                shininess = 1.0
-            shininess = shininess * 128.0
+        if shininess is None:
+            shininess = 228.0
+        else:
+            if shininess <= 1.0:
+                if shininess < 0.01:
+                    shininess = 1.0
+                shininess = shininess * 128.0
         mat.setShininess(shininess)
 
         bumpmap = getattr(prim_material.effect, "bumpmap", None)
